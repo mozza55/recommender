@@ -3,6 +3,7 @@ import requests
 import json
 import math
 import numpy as np
+from bs4 import BeautifulSoup
 
 area = pd.read_csv('area.csv')
 area.columns=['area_level','area_level_name','area_code','area_name','x','y','sigungu_code','dong_code','','date']
