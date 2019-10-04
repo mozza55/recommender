@@ -225,3 +225,70 @@ influencers
 x=random.randrange(1,100)
 y = 100-x
 print(x,y)
+
+# 랜덤 데이터 생성
+for i in influencers.index:
+    m = random.randrange(1, 100)
+    w = 100 - m
+    influencers['target_m'][i] = m
+    influencers['target_w'][i] = w
+    agelist = list()
+    temp = 100
+    for j in range(1, 7):
+        age = random.randrange(0, temp)
+        agelist.append(age)
+        temp = temp - age
+    random.shuffle(agelist)
+    # print(agelist)
+    # print(agelist[0])
+    influencers['target_10'][i] = agelist[0]
+    influencers['target_20'][i] = agelist[1]
+    influencers['target_30'][i] = agelist[2]
+    influencers['target_40'][i] = agelist[3]
+    influencers['target_50'][i] = agelist[4]
+    influencers['target_60'][i] = agelist[5]
+
+# 임의로 지역 설정
+# 11 680 64000
+# 시도 군구 행정동 코드
+dong =pd.unique(area['행정동_코드'])
+influencers['지역']= np.nan
+dong.shape
+for i in influencers.index:
+    influencers['지역'][i] = dong[random.randrange(0,375)]
+influencers
+
+ratings = pd.DataFrame(columns=['store_id','influencer_id','rating','gender','s_gender_m','i_gender_m','age'])
+ratings
+
+# rating
+#팝퓰레이션 스토어랑 매칭시켜야함.
+
+count =0
+for i in stores.index:
+    for j in influencers.index:
+        rating = 0
+        #카테고리
+        #지역
+        if stores['행정동코드'][i] ==influencers['지역'][j]:
+            rating = rating +3
+        elif stores['시군구코드'][i]== influencers['지역'][j]/100000:
+            rating = rating +2
+        elif stores['시군구코드'][i]/1000 == influencers['지역'][j]/100000000:
+            rating = rating +1
+        #성별
+        #gender = 1-math.pow(stores['target_m'][i]-influencers['target_m'][j],2)/10000
+        #rating = rating + gender*2
+        #연령
+        #age = math.pow(stores['target_10'][i]-influencers['target_10'][j],2)
+        #age = age + math.pow(stores['target_20'][i]-influencers['target_20'][j],2)
+        #age = age + math.pow(stores['target_30'][i]-influencers['target_30'][j],2)
+        #age = age + math.pow(stores['target_40'][i]-influencers['target_40'][j],2)
+        #age = age + math.pow(stores['target_50'][i]-influencers['target_50'][j],2)
+        #age = age + math.pow(stores['target_60'][i]-influencers['target_60'][j],2)
+        #age = 1- math.sqrt(age)/10000
+        #rating =rating +age*2
+        ratings.loc[count] = [i,j,rating,0,0,
+                             influencers['target_m'][j],0]
+        count =count+1
+ratings
